@@ -164,9 +164,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setH(20.0)
 
     def showMask(self):
-        mask = ((1.0 - self.nlmeans.mask) * 255.0).astype(np.uint8)
-        n = mask.shape[0]
+        n = self.nlmeans.mask.shape[0]
         m = n*8
+
+        mask = self.nlmeans.mask / self.nlmeans.mask[n//2,n//2] # rescale to make center extreme
+        mask = ((1.0 - mask)*255.0).astype(np.uint8)
 
         maskImage = QImage(n, n, QImage.Format_Indexed8)
         maskImage.setColorTable(GREY_PALETTE)
